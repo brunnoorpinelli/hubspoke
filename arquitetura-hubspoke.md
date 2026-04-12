@@ -16,8 +16,9 @@
 6. [Fluxo de Dados](#fluxo-de-dados)
 7. [Publicação de Produtos de Dados](#publicação-de-produtos-de-dados)
 8. [Modelo de Governança](#modelo-de-governança)
-9. [Migração Incremental](#migração-incremental)
-10. [Benefícios](#benefícios)
+9. [Modelo de Custos](#modelo-de-custos)
+10. [Migração Incremental](#migração-incremental)
+11. [Benefícios](#benefícios)
 
 ---
 
@@ -257,6 +258,45 @@ graph LR
 
 > A equipe de Plataforma de Dados não é mais um prestador de serviços de análise — é a equipe responsável por construir e operar a infraestrutura que torna todos os outros times de dados mais rápidos e confiáveis.
 
+### Princípio: Automação em Primeiro Lugar
+
+A equipe de Plataforma de Dados deve operar com uma mentalidade de **automação máxima** — qualquer tarefa repetitiva ou previsível deve ser automatizada antes de se tornar um processo manual recorrente. O trabalho manual é o inimigo da escala.
+
+> Se um processo requer intervenção manual recorrente da equipe de plataforma, ele precisa ser automatizado. O objetivo é que a plataforma opere e escale **sem crescimento proporcional da equipe**.
+
+**Ingestão totalmente automatizada:**
+
+Dado que o número de fontes e origens de dados é finito e conhecido, não há justificativa para pipelines de ingestão criados manualmente caso a caso. A plataforma deve oferecer um modelo de **self-service de ingestão**: o spoke solicita a conexão a uma nova fonte, a plataforma provisiona e monitora o pipeline automaticamente — sem envolvimento operacional da equipe de plataforma.
+
+```mermaid
+graph LR
+    subgraph SelfService["Portal Self-Service de Ingestão"]
+        FORM[Spoke solicita\nnova fonte de dados]
+        CONF[Configura parâmetros\n(conector, schedule, destino)]
+        APPR[Aprovação automática\nou revisão do hub]
+    end
+
+    subgraph Plataforma["Plataforma — Automação"]
+        PIPE[Pipeline instanciado\nautomaticamente]
+        MON[Monitoramento\nautomático ativado]
+        CAT[Fonte catalogada\nno Dataplex]
+    end
+
+    FORM --> CONF --> APPR --> PIPE --> MON --> CAT
+
+    style SelfService fill:#34a853,color:#fff
+    style Plataforma fill:#1a73e8,color:#fff
+```
+
+| Tipo de tarefa | Abordagem correta |
+|---|---|
+| **Ingestão de nova fonte** | Self-service: spoke configura, plataforma automatiza |
+| **Onboarding de novo spoke** | Templates IaC parametrizáveis, sem configuração manual |
+| **Monitoramento de pipelines** | Alertas automáticos, sem plantão ou verificação manual |
+| **Qualidade de dados** | Regras executadas automaticamente pelo Dataplex |
+| **Publicação no marketplace** | Fluxo automatizado pós-certificação do Dataplex |
+| **Provisionamento de acesso** | Self-service via IAM com políticas pré-aprovadas por perfil |
+
 ---
 
 ## O Impacto do Mundo Agêntico nos Spokes
@@ -491,6 +531,60 @@ Hub (Plataforma)                    Spoke (Domínio)
 
 ---
 
+## Modelo de Custos
+
+Uma das vantagens mais estratégicas da arquitetura Hub-Spoke é a **segregação natural de custos** entre as equipes. A separação clara de responsabilidades entre Hub e Spokes se reflete diretamente na alocação de gastos na GCP, eliminando o problema clássico dos modelos centralizados onde o custo de dados era um "pool" opaco sem accountability por domínio.
+
+**Princípio de alocação:**
+
+| Camada | Responsável pelo custo | Justificativa |
+|---|---|---|
+| **Governança** (Dataplex + IAM + Logging) | Hub | Serviço compartilhado de plataforma, beneficia todos |
+| **Orquestração** (Cloud Composer) | Hub | Infraestrutura central de scheduling |
+| **Marketplace** (Analytics Hub) | Hub | Canal de publicação compartilhado |
+| **Ingestão por fonte** | Spoke solicitante | Cada spoke paga pela ingestão das fontes que solicitou |
+| **Transformação** (Dataform + BigQuery) | Spoke | Cada domínio paga pelo processamento das suas transformações |
+| **Armazenamento do domínio** (BigQuery) | Spoke | Datasets e camadas (raw, trusted, refined) alocados por domínio |
+
+```mermaid
+graph TB
+    subgraph Hub_Custos["Custos do Hub — Plataforma Compartilhada"]
+        C1[Governança\nDataplex + IAM + Logging]
+        C2[Orquestração\nCloud Composer]
+        C3[Marketplace\nAnalytics Hub]
+    end
+
+    subgraph Ingestao_Custos["Ingestão — Alocada por Spoke Solicitante"]
+        CI1[Ingestão Fonte A → Spoke Vendas]
+        CI2[Ingestão Fonte B → Spoke Marketing]
+        CI3[Ingestão Fonte C → Spoke Financeiro]
+    end
+
+    subgraph Spoke_Custos["Custos dos Spokes — Por Domínio"]
+        CS1[Spoke Vendas\nTransformação + Armazenamento]
+        CS2[Spoke Marketing\nTransformação + Armazenamento]
+        CS3[Spoke Financeiro\nTransformação + Armazenamento]
+    end
+
+    style Hub_Custos fill:#1a73e8,color:#fff
+    style Ingestao_Custos fill:#fbbc04,color:#333
+    style Spoke_Custos fill:#34a853,color:#fff
+```
+
+**Como a segregação funciona na prática:**
+
+Utilizando **labels por projeto e por spoke** nos recursos GCP, é possível atribuir com precisão:
+
+- O custo de cada pipeline de ingestão ao spoke que o solicitou (via label `spoke=vendas`, por exemplo)
+- O custo de processamento BigQuery por domínio
+- O custo de armazenamento por camada e por domínio
+
+Isso significa que o chargeback financeiro entre as equipes é baseado em dados reais de consumo, não em estimativas ou rateios arbitrários.
+
+> O Hub paga pela infraestrutura que beneficia a todos — governança, orquestração e marketplace. Cada spoke paga exatamente pelo que consome em ingestão, transformação e armazenamento. Quanto mais eficiente o domínio for nas suas transformações, menor será o seu custo.
+
+---
+
 ## Migração Incremental
 
 Adotar a arquitetura Hub-Spoke **não exige uma migração big-bang**. Não é necessário parar tudo, redesenhar sistemas e migrar de uma vez. A transição pode — e deve — ser feita de forma incremental, domínio por domínio, reduzindo risco e gerando valor desde as primeiras semanas.
@@ -586,7 +680,7 @@ quadrantChart
 | **Qualidade garantida** | Dataplex Data Quality como portão de entrada para o marketplace |
 | **Autonomia de domínio** | Spokes transformam e publicam sem depender da equipe central |
 | **Governança unificada** | IAM e políticas gerenciadas pelo hub, aplicadas a todos |
-| **Custo controlado** | Infraestrutura de ingestão compartilhada; sem duplicação por domínio |
+| **Custo controlado e segregado** | Hub paga pela plataforma compartilhada; spokes pagam pela sua transformação e ingestão — chargeback baseado em consumo real |
 | **Rastreabilidade** | Linhagem de ponta a ponta registrada pelo Dataform + Dataplex |
 | **Escalabilidade** | Novos domínios (spokes) aderem ao padrão sem redesenhar o hub |
 | **Segurança** | Audit logs centralizados; nenhum acesso sem registro |
