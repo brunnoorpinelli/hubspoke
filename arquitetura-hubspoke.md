@@ -664,7 +664,7 @@ graph TD
 quadrantChart
     title Centralizado vs Distribuído — Comparação
     x-axis Baixa Autonomia --> Alta Autonomia
-    y-axis Baixa Governança --> Alta Governança
+    y-axis Baixa Governanca --> Alta Governanca
     quadrant-1 Hub-Spoke ✅
     quadrant-2 Data Lake Centralizado
     quadrant-3 Caos
