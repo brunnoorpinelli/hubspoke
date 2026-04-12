@@ -662,14 +662,14 @@ graph TD
 
 ```mermaid
 quadrantChart
-    title Centralizado vs Distribuído — Comparação
+    title Centralizado vs Distribuido - Comparacao
     x-axis Baixa Autonomia --> Alta Autonomia
     y-axis Baixa Governanca --> Alta Governanca
     quadrant-1 Hub-Spoke
     quadrant-2 Data Lake Centralizado
     quadrant-3 Caos
-    quadrant-4 Data Mesh sem governança
-    Hub-Spoke Analítico: [0.80, 0.85]
+    quadrant-4 Data Mesh sem governanca
+    Hub-Spoke Analitico: [0.80, 0.85]
     Data Lake Centralizado: [0.20, 0.70]
     Data Mesh puro: [0.85, 0.25]
 ```
