@@ -272,7 +272,7 @@ Dado que o número de fontes e origens de dados é finito e conhecido, não há 
 graph LR
     subgraph SelfService["Portal Self-Service de Ingestão"]
         FORM[Spoke solicita\nnova fonte de dados]
-        CONF[Configura parâmetros\n(conector, schedule, destino)]
+        CONF[Configura parâmetros\nconector, schedule, destino]
         APPR[Aprovação automática\nou revisão do hub]
     end
 
@@ -665,7 +665,7 @@ quadrantChart
     title Centralizado vs Distribuído — Comparação
     x-axis Baixa Autonomia --> Alta Autonomia
     y-axis Baixa Governanca --> Alta Governanca
-    quadrant-1 Hub-Spoke ✅
+    quadrant-1 Hub-Spoke
     quadrant-2 Data Lake Centralizado
     quadrant-3 Caos
     quadrant-4 Data Mesh sem governança
