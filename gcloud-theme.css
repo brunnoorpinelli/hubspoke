@@ -1,0 +1,470 @@
+/* @theme gcloud */
+
+@import 'default';
+
+/* ==============================
+   Google Cloud Marp Theme
+   Based on Google Cloud visual identity
+   ============================== */
+
+/* --- CSS Variables --- */
+:root {
+  --gcloud-blue: #4285F4;
+  --gcloud-green: #34A853;
+  --gcloud-yellow: #FBBC05;
+  --gcloud-red: #EA4335;
+  --gcloud-grey-900: #202124;
+  --gcloud-grey-700: #5F6368;
+  --gcloud-grey-200: #E8EAED;
+  --gcloud-grey-100: #F1F3F4;
+  --gcloud-light-blue: #5C92F6;
+  --gcloud-bg: #FFFFFF;
+}
+
+/* --- Base Section (all slides) --- */
+section {
+  font-family: 'Inter', 'Google Sans', 'Roboto', Arial, sans-serif;
+  background-color: var(--gcloud-bg);
+  color: var(--gcloud-grey-900);
+  padding: 60px 64px;
+  justify-content: flex-start;
+  width: 1280px;
+  height: 720px;
+}
+
+section::after {
+  /* Page numbers - hidden by default, shown with paginate: true */
+  color: var(--gcloud-grey-700);
+  font-size: 12px;
+}
+
+/* --- Typography --- */
+section h1 {
+  font-size: 2.8em;
+  font-weight: 500;
+  color: var(--gcloud-grey-900);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+
+section h2 {
+  font-size: 2.2em;
+  font-weight: 500;
+  color: var(--gcloud-grey-900);
+  margin-bottom: 20px;
+}
+
+section h3 {
+  font-size: 1.4em;
+  font-weight: 500;
+  color: var(--gcloud-grey-900);
+  margin-bottom: 12px;
+}
+
+section h4 {
+  font-size: 1em;
+  font-weight: 700;
+  color: var(--gcloud-grey-900);
+  margin-bottom: 8px;
+}
+
+section p,
+section li {
+  font-size: 1.1em;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--gcloud-grey-900);
+}
+
+/* --- Accent text --- */
+section strong {
+  color: var(--gcloud-blue);
+  font-weight: 600;
+}
+
+section em {
+  color: var(--gcloud-grey-700);
+  font-style: normal;
+}
+
+/* --- Bullet points (Google style) --- */
+section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+section ul li {
+  padding-left: 1.2em;
+  position: relative;
+  margin-bottom: 0.4em;
+}
+
+section ul li::before {
+  content: "\2022";
+  color: var(--gcloud-blue);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Nested bullets */
+section ul ul li::before {
+  content: "\25E6";
+  color: var(--gcloud-grey-700);
+}
+
+/* --- Links --- */
+section a {
+  color: var(--gcloud-blue);
+  text-decoration: none;
+}
+
+section a:hover {
+  text-decoration: underline;
+}
+
+/* --- Code blocks --- */
+section code {
+  background-color: var(--gcloud-grey-100);
+  color: var(--gcloud-grey-900);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+section pre {
+  background-color: var(--gcloud-grey-900);
+  color: #E8EAED;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+section pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* --- Tables --- */
+section table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+section table th {
+  background-color: var(--gcloud-grey-100);
+  color: var(--gcloud-grey-900);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--gcloud-grey-200);
+}
+
+section table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--gcloud-grey-200);
+}
+
+/* ==============================
+   Gradient Line
+   Use with: <div class="gradient-line"></div>
+   ============================== */
+
+/* --- Blockquote as decorative accent bar --- */
+section blockquote {
+  border-left: 4px solid var(--gcloud-blue);
+  padding: 8px 20px;
+  margin: 16px 0;
+  background-color: rgba(66, 133, 244, 0.05);
+  color: var(--gcloud-grey-900);
+}
+
+/* ===================================
+   SLIDE TYPE: Title Slide
+   Use with: <!-- _class: title -->
+   =================================== */
+section.title {
+  justify-content: center;
+  padding: 60px 80px;
+}
+
+section.title h1 {
+  font-size: 3.4em;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  max-width: 65%;
+  margin-bottom: 48px;
+}
+
+section.title h3 {
+  font-size: 1.2em;
+  font-weight: 400;
+  color: var(--gcloud-grey-700);
+}
+
+section.title p {
+  color: var(--gcloud-grey-700);
+  font-size: 1.1em;
+}
+
+/* Google colored dots decoration for title slides */
+section.title::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--gcloud-blue) 0%,
+    var(--gcloud-blue) 25%,
+    var(--gcloud-red) 25%,
+    var(--gcloud-red) 50%,
+    var(--gcloud-yellow) 50%,
+    var(--gcloud-yellow) 75%,
+    var(--gcloud-green) 75%,
+    var(--gcloud-green) 100%
+  );
+}
+
+/* ===================================
+   SLIDE TYPE: Section Divider
+   Use with: <!-- _class: section -->
+   =================================== */
+section.section {
+  justify-content: center;
+  background-color: var(--gcloud-blue);
+  color: white;
+}
+
+section.section h1 {
+  color: white;
+  font-size: 3em;
+  font-weight: 500;
+}
+
+section.section h2 {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+
+section.section p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+section.section strong {
+  color: white;
+}
+
+/* ===================================
+   SLIDE TYPE: Content Slide (default)
+   Standard slide with heading and body.
+   No special class needed.
+   =================================== */
+
+/* ===================================
+   SLIDE TYPE: Two-Column Layout
+   Use with: <!-- _class: cols -->
+   Then use a horizontal rule (---) inside
+   to split content, or use HTML divs.
+   =================================== */
+section.cols {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* ===================================
+   SLIDE TYPE: Stats / Numbers
+   Use with: <!-- _class: stats -->
+   =================================== */
+section.stats h2 {
+  margin-bottom: 32px;
+}
+
+section.stats h3 {
+  font-size: 2em;
+  font-weight: 600;
+  color: var(--gcloud-light-blue);
+  margin-bottom: 4px;
+}
+
+section.stats p {
+  font-size: 1em;
+  color: var(--gcloud-grey-700);
+}
+
+/* ===================================
+   SLIDE TYPE: Speaker / Bio
+   Use with: <!-- _class: speaker -->
+   =================================== */
+section.speaker {
+  padding: 60px 80px;
+}
+
+section.speaker h2 {
+  margin-bottom: 40px;
+}
+
+section.speaker h3 {
+  color: var(--gcloud-light-blue);
+  font-size: 1.6em;
+  font-weight: 500;
+}
+
+section.speaker h4 {
+  color: var(--gcloud-grey-700);
+  font-weight: 400;
+  font-size: 1.1em;
+}
+
+/* ===================================
+   SLIDE TYPE: Quote
+   Use with: <!-- _class: quote -->
+   =================================== */
+section.quote {
+  justify-content: center;
+  padding: 80px 100px;
+}
+
+section.quote blockquote {
+  border-left: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+section.quote blockquote p {
+  font-size: 1.8em;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--gcloud-grey-900);
+}
+
+section.quote blockquote p:last-child {
+  font-size: 1em;
+  color: var(--gcloud-grey-700);
+  margin-top: 24px;
+}
+
+/* ===================================
+   SLIDE TYPE: Closing / Thank You
+   Use with: <!-- _class: closing -->
+   =================================== */
+section.closing {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+section.closing h1 {
+  font-size: 3.2em;
+  max-width: 100%;
+}
+
+section.closing p {
+  color: var(--gcloud-grey-700);
+  font-size: 1.2em;
+}
+
+section.closing::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--gcloud-blue) 0%,
+    var(--gcloud-blue) 25%,
+    var(--gcloud-red) 25%,
+    var(--gcloud-red) 50%,
+    var(--gcloud-yellow) 50%,
+    var(--gcloud-yellow) 75%,
+    var(--gcloud-green) 75%,
+    var(--gcloud-green) 100%
+  );
+}
+
+/* ===================================
+   SLIDE TYPE: Agenda
+   Use with: <!-- _class: agenda -->
+   =================================== */
+section.agenda h2 {
+  margin-bottom: 16px;
+}
+
+section.agenda::after {
+  /* Gradient line below title - using pseudo-element */
+}
+
+/* ===================================
+   SLIDE TYPE: Lead (centered)
+   Use with: <!-- _class: lead -->
+   =================================== */
+section.lead {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+section.lead h1 {
+  max-width: 80%;
+}
+
+/* ===================================
+   SLIDE TYPE: Invert (dark background)
+   Use with: <!-- _class: invert -->
+   =================================== */
+section.invert {
+  background-color: var(--gcloud-grey-900);
+  color: white;
+}
+
+section.invert h1,
+section.invert h2,
+section.invert h3,
+section.invert h4 {
+  color: white;
+}
+
+section.invert p,
+section.invert li {
+  color: var(--gcloud-grey-200);
+}
+
+section.invert strong {
+  color: var(--gcloud-light-blue);
+}
+
+section.invert ul li::before {
+  color: var(--gcloud-light-blue);
+}
+
+section.invert code {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--gcloud-grey-200);
+}
+
+/* ===================================
+   Footer Styling
+   Use MARP footer directive:
+   footer: 'Google Cloud'
+   =================================== */
+section footer {
+  font-size: 11px;
+  color: var(--gcloud-grey-700);
+}
+
+/* ===================================
+   Header Styling
+   Use MARP header directive:
+   header: 'Proprietary & Confidential'
+   =================================== */
+section header {
+  font-size: 11px;
+  color: var(--gcloud-grey-700);
+}
