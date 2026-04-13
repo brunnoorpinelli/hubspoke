@@ -170,9 +170,13 @@ graph TB
     ING -->|dados brutos padronizados| M2
     ING -->|dados brutos padronizados| F2
 
-    V2 -->|publicação via produto de dados| MKT
-    M2 -->|publicação via produto de dados| MKT
-    F2 -->|publicação via produto de dados| MKT
+    V2 -->|publicação| MKT
+    M2 -->|publicação| MKT
+    F2 -->|publicação| MKT
+
+    MKT -->|consumo via linked dataset| V2
+    MKT -->|consumo via linked dataset| M2
+    MKT -->|consumo via linked dataset| F2
 
     MKT --> BI
     MKT --> DS
@@ -203,7 +207,9 @@ O Hub é o **projeto GCP central** que provê serviços de plataforma para todos
 
 ### Os Spokes
 
-Os Spokes são os **projetos GCP de domínio ou área de negócio**. Cada spoke é dono do conhecimento e da lógica do seu domínio — ele consome dados brutos fornecidos pelo hub e produz produtos de dados que são publicados de volta ao marketplace.
+Os Spokes são os **projetos GCP de domínio ou área de negócio**. Cada spoke é dono do conhecimento e da lógica do seu domínio — ele consome dados brutos fornecidos pelo hub, produz produtos de dados certificados, e também **consome produtos de dados publicados por outros spokes** via marketplace.
+
+> Os spokes são simultaneamente publicadores e consumidores do Analytics Hub. Um domínio de Marketing pode consumir dados certificados do domínio de Vendas sem qualquer integração direta entre os projetos — tudo mediado pelo marketplace.
 
 **Responsabilidades dos Spokes:**
 
@@ -212,6 +218,7 @@ Os Spokes são os **projetos GCP de domínio ou área de negócio**. Cada spoke 
 | **Transformação** | Dataform | Modelos SQL, testes de qualidade, documentação de linhagem |
 | **Armazenamento** | BigQuery | Datasets do domínio (raw, trusted, refined) |
 | **Publicação** | Analytics Hub (via Hub) | Publicação dos produtos de dados no marketplace |
+| **Consumo** | Analytics Hub (via Hub) | Subscrição a produtos de dados de outros domínios |
 
 **O que os spokes NÃO fazem:**
 - Criar pipelines de ingestão próprios fora do padrão
@@ -396,29 +403,6 @@ graph LR
 ---
 
 ## Fluxo de Dados
-
-```mermaid
-sequenceDiagram
-    actor Fonte as Fonte de Dados
-    participant PS as Pub/Sub
-    participant DF as Dataflow/Dataproc
-    participant CC as Composer
-    participant BQ_RAW as BigQuery (Raw)
-    participant DFM as Dataform
-    participant BQ_REF as BigQuery (Refined)
-    participant DPX as Dataplex
-    participant AH as Analytics Hub
-
-    Fonte->>PS: evento ou arquivo
-    CC->>DF: aciona pipeline
-    DF->>BQ_RAW: grava dados brutos padronizados
-    CC->>DFM: aciona transformações do domínio
-    DFM->>BQ_REF: aplica regras de negócio, testes
-    DFM->>DPX: registra linhagem e metadados
-    BQ_REF->>DPX: validação de qualidade
-    DPX-->>BQ_REF: aprovação / quarentena
-    BQ_REF->>AH: publicação como produto de dados
-```
 
 **Camadas de dados no BigQuery:**
 
