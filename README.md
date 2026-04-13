@@ -2,14 +2,21 @@
 
 Documentação e materiais de apresentação da arquitetura **Hub-Spoke Analítica** — uma evolução do Data Lake centralizado e do Data Mesh distribuído, aplicando o padrão hub-spoke de redes ao mundo analítico no Google Cloud.
 
-## Conteúdo
+## Estrutura
 
-| Arquivo | Descrição |
-|---|---|
-| [`arquitetura-hubspoke.md`](arquitetura-hubspoke.md) | Documento completo da arquitetura com diagramas Mermaid |
-| [`hubspoke-apresentacao.md`](hubspoke-apresentacao.md) | Deck MARP (fonte da apresentação) |
-| [`hubspoke-apresentacao.html`](hubspoke-apresentacao.html) | Apresentação interativa — abre direto no browser |
-| [`hubspoke-apresentacao.pptx`](hubspoke-apresentacao.pptx) | Apresentação exportada em PowerPoint editável |
+```
+├── docs/
+│   └── arquitetura-hubspoke.md     # Documento completo com diagramas Mermaid
+├── slides/
+│   ├── hubspoke-apresentacao.md    # Deck MARP — apresentação completa (SCQA)
+│   ├── hubspoke-apresentacao.html  # HTML interativo — abre no browser
+│   ├── hubspoke-apresentacao.pptx  # PowerPoint editável
+│   ├── hubspoke-zen.md             # Deck Zen — 10 slides, estilo minimalista
+│   ├── hubspoke-zen.html           # HTML interativo — versão Zen
+│   └── hubspoke-zen.pptx          # PowerPoint editável — versão Zen
+└── assets/
+    └── gcloud-theme.css            # Tema MARP com identidade visual Google Cloud
+```
 
 ## A Arquitetura
 
@@ -21,7 +28,7 @@ Centralizar o que é plataforma. Distribuir o que é domínio.
 
 **Hub (projeto central):** ingestão padronizada, governança via Dataplex, marketplace via Analytics Hub (Sharing)
 
-**Spokes (projetos de domínio):** transformações com Dataform + BigQuery, publicação de produtos de dados certificados
+**Spokes (projetos de domínio):** transformações com Dataform + BigQuery, publicação e consumo de produtos de dados certificados
 
 ### Stack Google Cloud
 
@@ -29,30 +36,29 @@ Centralizar o que é plataforma. Distribuir o que é domínio.
 
 ## Como Apresentar
 
-Abra `hubspoke-apresentacao.html` em qualquer browser:
+Abra qualquer `.html` da pasta `slides/` em qualquer browser:
 
 - Clique em **⛶ Apresentar** para entrar no modo apresentação
 - Navegue com `→` / `←` ou `Space`
 - `Esc` para sair
 
-## Regenerar a Apresentação
+## Regenerar os HTMLs
 
 ```bash
 npm install
 node -e "
-const {Marp} = require('@marp-team/marp-core');
-const fs = require('fs');
-const md = fs.readFileSync('hubspoke-apresentacao.md','utf-8');
-const css = fs.readFileSync('gcloud-theme.css','utf-8');
-const marp = new Marp({html:true});
-marp.themeSet.add(css);
-const {html, css:c} = marp.render(md);
-// wrap with shell from previous render script
+import('@marp-team/marp-core').then(({Marp}) => {
+  const fs = require('fs');
+  const marp = new Marp({html:true});
+  const css = fs.readFileSync('assets/gcloud-theme.css','utf-8');
+  marp.themeSet.add(css);
+  // render slides/<deck>.md → slides/<deck>.html
+});
 "
 ```
 
 Ou use o Marp CLI com Node.js ≤ 22:
 
 ```bash
-npx @marp-team/marp-cli@latest hubspoke-apresentacao.md --html --theme gcloud-theme.css -o hubspoke-apresentacao.html
+npx @marp-team/marp-cli@latest slides/hubspoke-apresentacao.md --html --theme assets/gcloud-theme.css -o slides/hubspoke-apresentacao.html
 ```
