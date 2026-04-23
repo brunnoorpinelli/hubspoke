@@ -650,12 +650,12 @@ quadrantChart
     x-axis Baixa Autonomia --> Alta Autonomia
     y-axis Baixa Governanca --> Alta Governanca
     quadrant-1 Hub-Spoke
-    quadrant-2 Data Lake Centralizado
+    quadrant-2 Centralizado
     quadrant-3 Caos
-    quadrant-4 Data Mesh sem governanca
-    Hub-Spoke Analitico: [0.80, 0.85]
-    Data Lake Centralizado: [0.20, 0.70]
-    Data Mesh puro: [0.85, 0.25]
+    quadrant-4 Data Mesh
+    Hub-Spoke: [0.70, 0.80]
+    Centralizado: [0.10, 0.90]
+    Data Mesh: [0.85, 0.30]
 ```
 
 | Benefício | Como o Hub-Spoke entrega |
