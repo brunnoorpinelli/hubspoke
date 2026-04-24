@@ -258,7 +258,7 @@ graph TB
     end
 
     subgraph Serving["Hub Serving — Google Cloud"]
-        XCLOUD["BigQuery Cross-Cloud Lakehouse\n(BigLake + Omni)"]
+        XCLOUD["BigQuery Cross-Cloud Lakehouse\n(BigLake)"]
         BQ_GOLD[(BigQuery\nCamada Gold / Serving)]
         AH[Analytics Hub\nMarketplace]
         DPX[Dataplex\nGovernança + Qualidade]
@@ -396,7 +396,7 @@ graph LR
 | **Pushdown de predicados** | Filtros aplicados na origem — não transfere dados desnecessários |
 | **Suporte a metadados Iceberg** | Schema evolution, partitioning, snapshots — tudo respeitado pelo BigQuery |
 | **Governança unificada** | Dataplex aplica políticas de qualidade e acesso sobre tabelas cross-cloud |
-| **Performance otimizada** | BigQuery Omni processa dados localmente na AWS quando necessário |
+| **Performance otimizada** | BigQuery aplica caching e materialização seletiva para queries cross-cloud frequentes |
 
 **Exemplo de criação de tabela cross-cloud:**
 
